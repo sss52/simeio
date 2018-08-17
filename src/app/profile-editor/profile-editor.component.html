@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Assignment</title>
+</head>
+
+<body>
+
+<div class="left w-100">
+
+<div class="left w-30">
+
+	<form [formGroup]="profileForm" (ngSubmit)="onSubmit()">
+
+	  <h3>User Details</h3>
+
+	  <label>
+		User Name:
+		<input type="text" formControlName="userName" required>
+	  </label>
+
+	  <label>
+		Email:
+		<input type="email" formControlName="email">
+	  </label>
+
+		<label>
+		Full name:
+		<input type="text" formControlName="fullName">
+	  </label>
+
+  <div formGroupName="other_details">
+
+    <h3>Other Details</h3>
+
+    <label>
+      Country:
+      <select formControlName="country">
+        <option value="india">India</option>
+        <option value="germany">Germany</option>
+        <option value="uae">UAE</option>
+        <option value="australia">Australia</option>
+        <option value="france">France</option>
+        <option value="england">England</option>
+        <option value="canada">Canada</option>
+      </select>
+    </label>
+
+    <label>
+      Telephone number:
+      <input type="text" formControlName="telephone_number">
+    </label>
+    
+    <label>
+      Date of birth:
+      <input type="date" formControlName="dob">
+    </label>
+
+    <label>
+      Sex      
+    </label>
+    <input type="radio" name="gender" value="male" checked> Male <input type="radio" name="gender" value="female"> Female<br>
+
+  </div><br>
+
+<button type="submit" [disabled]="!profileForm.valid">Submit</button>
+
+</form>
+
+</div>
+
+<div class="left w-70">
+  
+  <mat-form-field>
+    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Type to filter">
+  </mat-form-field><br/><br/>
+
+	<mat-table [dataSource]="dataSource" matSort>
+
+	  <ng-container matColumnDef="userName">
+		<mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+		<mat-cell *matCellDef="let element">{{element.userName}}</mat-cell>
+	  </ng-container>
+
+	  <ng-container matColumnDef="email">
+		<mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+		<mat-cell *matCellDef="let element">{{element.email}}</mat-cell>
+	  </ng-container>
+
+	  <ng-container matColumnDef="fullName">
+		<mat-header-cell *matHeaderCellDef mat-sort-header> Full name </mat-header-cell>
+		<mat-cell *matCellDef="let element">{{element.fullName}}</mat-cell>
+	  </ng-container>
+
+    <ng-container matColumnDef="expandedDetail">
+      <mat-cell *matCellDef="let detail"> 
+        {{detail.element.userName}}
+      </mat-cell>
+    </ng-container>
+
+	  <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+	  <mat-row *matRowDef="let row; columns: displayedColumns;" matRipple 
+            class="element-row" 
+            [class.expanded]="expandedElement == row"
+            (click)="expandedElement = row"></mat-row>
+
+    <mat-row *matRowDef="let row; columns: ['expandedDetail']; when: isExpansionDetailRow"
+            [@detailExpand]="row.element == expandedElement ? 'expanded' : 'collapsed'"
+            style="overflow: hidden">
+    </mat-row>
+
+	</mat-table>
+
+  <mat-paginator [length]="5" [pageSize]="3" [pageSizeOptions]="[5, 10, 25]"></mat-paginator>
+
+</div>
+</div>
+</body>
+</html>
